@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b0e14"/>
+      <stop offset="100%" style="stop-color:#13171f"/>
+    </linearGradient>
+    <linearGradient id="push" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6ea8fe"/>
+      <stop offset="100%" style="stop-color:#c084fc"/>
+    </linearGradient>
+    <linearGradient id="pull" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ade80"/>
+      <stop offset="100%" style="stop-color:#facc15"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="38" fill="url(#bg)"/>
+  <text x="50%" y="38%" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-weight="700" font-size="48" fill="url(#push)">PP</text>
+  <text x="50%" y="68%" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-weight="400" font-size="24" fill="url(#pull)">TRACKER</text>
+</svg>
