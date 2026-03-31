@@ -2,7 +2,7 @@
   "name": "Push/Pull Tracker",
   "short_name": "PP Tracker",
   "description": "6-Day Push/Pull Calisthenics Training Tracker",
-  "start_url": "./index.html",
+  "start_url": "/pp-tracker/",
   "display": "standalone",
   "background_color": "#0b0e14",
   "theme_color": "#0b0e14",
