@@ -8,23 +8,38 @@
 <meta name="apple-mobile-web-app-title" content="PP Tracker">
 <meta name="theme-color" content="#0b0e14">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.svg">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Push / Pull Tracker</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap');
-:root{--bg:#0b0e14;--surface:#13171f;--surface2:#1a1f2b;--border:#252d3d;--border2:#2f3a4e;--text:#e2e8f0;--text2:#7a8494;--text3:#525c6e;--accent:#6ea8fe;--accent2:#4ade80;--orange:#fb923c;--red:#f87171;--purple:#c084fc;--yellow:#facc15;--cyan:#22d3ee;--push:#6ea8fe;--pull:#4ade80;--radius:14px;--radius-sm:10px;--radius-xs:6px;--shadow:0 2px 8px rgba(0,0,0,.3)}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: local('DM Sans'), local('DMSans');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: local('Space Mono'), local('SpaceMono');
+}
+:root{--bg:#0b0e14;--surface:#13171f;--surface2:#1a1f2b;--border:#252d3d;--border2:#2f3a4e;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--accent:#6ea8fe;--accent2:#4ade80;--orange:#fb923c;--red:#f87171;--purple:#c084fc;--yellow:#facc15;--cyan:#22d3ee;--push:#6ea8fe;--pull:#4ade80;--radius:14px;--radius-sm:10px;--radius-xs:6px;--shadow:0 2px 8px rgba(0,0,0,.3)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 .app{max-width:620px;margin:0 auto;padding:16px;padding-bottom:110px}
 .header{text-align:center;padding:20px 0 14px}
 .header h1{font-family:'Space Mono',monospace;font-size:19px;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--push),var(--pull));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .header .subtitle{font-size:11px;color:var(--text2);margin-top:3px;font-family:'Space Mono',monospace;letter-spacing:.5px}
 .tabs{display:flex;gap:2px;background:var(--surface);border-radius:var(--radius);padding:3px;margin-bottom:14px;border:1px solid var(--border)}
 .tab{flex:1;padding:7px 4px;text-align:center;font-size:12px;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;color:var(--text2);background:transparent;border:none;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.tab:focus{outline:2px solid var(--accent);outline-offset:-2px}
 .tab.active{background:var(--accent);color:#fff}
 .week-nav{display:flex;align-items:center;gap:6px;margin-bottom:20px}
 .week-nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;transition:all .15s}
 .week-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.week-nav-btn:focus{outline:2px solid var(--accent);outline-offset:2px}
 .week-bar{display:flex;gap:4px;flex:1}
 .week-dot{flex:1;height:6px;border-radius:3px;background:var(--border);position:relative;cursor:pointer;transition:background .15s}
 .week-dot:hover{background:var(--border2)}
@@ -46,8 +61,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .today-meta{display:flex;gap:14px;font-size:12px;color:var(--text2);flex-wrap:wrap}
 .today-meta span{display:flex;align-items:center;gap:4px}
 .past-badge{display:inline-block;background:rgba(251,146,60,.15);color:var(--orange);font-size:10px;font-family:'Space Mono',monospace;padding:2px 8px;border-radius:12px;margin-left:8px}
+.session-picker{background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius);padding:16px;margin-bottom:14px;animation:fadeIn .25s ease-out}
+.session-picker-title{font-size:13px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.session-picker-sub{font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.session-picker-suggested{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.session-picker-suggested .sps-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
+.session-picker-suggested .sps-name{font-size:14px;font-weight:600;flex:1}
+.session-picker-suggested .sps-type{font-size:10px;padding:2px 8px;border-radius:12px;font-family:'Space Mono',monospace}
+.session-picker-suggested .sps-type.push{background:rgba(110,168,254,.12);color:var(--push)}
+.session-picker-suggested .sps-type.pull{background:rgba(74,222,128,.12);color:var(--pull)}
+.session-picker-btns{display:flex;gap:8px;margin-bottom:10px}
+.session-picker-btns .btn{flex:1}
+.session-picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.session-option{padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;text-align:left}
+.session-option:hover{border-color:var(--accent);background:rgba(110,168,254,.05)}
+.session-option:focus{outline:2px solid var(--accent);outline-offset:2px}
+.session-option.push-opt{border-left:3px solid var(--push)}
+.session-option.pull-opt{border-left:3px solid var(--pull)}
+.session-option .so-name{font-size:12px;font-weight:600;margin-bottom:2px}
+.session-option .so-detail{font-size:10px;color:var(--text2)}
 .workout-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;animation:fadeIn .25s ease-out}
 .section-header{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.section-header:focus{outline:2px solid var(--accent);outline-offset:-2px}
 .section-header h3{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
 .section-tag{font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
 .tag-push{background:rgba(110,168,254,.1);color:var(--push)}.tag-pull{background:rgba(74,222,128,.1);color:var(--pull)}.tag-acc{background:rgba(250,204,21,.1);color:var(--yellow)}.tag-fin{background:rgba(248,113,113,.1);color:var(--red)}.tag-warm{background:rgba(34,211,238,.1);color:var(--cyan)}.tag-cool{background:rgba(192,132,252,.1);color:var(--purple)}
@@ -81,8 +116,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .check-label{font-size:13px;flex:1}.check-detail{font-size:11px;color:var(--text2);font-family:'Space Mono',monospace;white-space:nowrap}
 .action-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(19,23,31,.92);border-top:1px solid var(--border);padding:10px 16px;display:flex;gap:8px;justify-content:center;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+.btn:focus{outline:2px solid var(--accent);outline-offset:2px}
 .btn-primary{background:var(--accent);color:#fff;flex:1;max-width:300px}.btn-primary:hover{background:#93bfff}.btn-primary:disabled{opacity:.35;cursor:not-allowed}
 .btn-secondary{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}.btn-secondary:hover{background:var(--border);color:var(--text)}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
 .date-picker-bar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px}
 .date-picker-bar label{font-size:11px;color:var(--text2);white-space:nowrap;font-family:'Space Mono',monospace}
 .date-picker-bar input[type="date"]{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-xs);padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;flex:1;max-width:180px;cursor:pointer;color-scheme:dark}
@@ -118,7 +155,13 @@ input[type="file"]{display:none}
 .session-index-control input::-webkit-outer-spin-button,.session-index-control input::-webkit-inner-spin-button{-webkit-appearance:none}
 .session-index-control .si-info{font-size:11px;color:var(--text2);flex:1}
 .install-banner{background:linear-gradient(135deg,rgba(110,168,254,.08),rgba(74,222,128,.06));border:1px solid rgba(110,168,254,.2);border-radius:var(--radius);padding:14px;margin-bottom:14px;text-align:center;display:none}.install-banner.show{display:block}.install-banner p{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5}.install-banner .btn-install{background:var(--accent);color:#fff;font-weight:700;border:none;padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}.install-banner .btn-dismiss{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;margin-left:10px;font-family:'DM Sans',sans-serif}
-.toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#111;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;z-index:400;transition:top .3s ease;white-space:nowrap;box-shadow:var(--shadow)}.toast.show{top:16px;top:calc(16px + env(safe-area-inset-top))}
+.toast{position:fixed;top:-60px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#111;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;z-index:400;transition:top .3s ease;white-space:nowrap;box-shadow:var(--shadow)}.toast.show{top:16px;top:calc(16px + env(safe-area-inset-top))}.toast.error{background:var(--red)}
+.backup-reminder{background:linear-gradient(135deg,rgba(251,146,60,.08),rgba(248,113,113,.06));border:1px solid rgba(251,146,60,.25);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.backup-reminder-icon{font-size:20px;flex-shrink:0}
+.backup-reminder-text{flex:1;font-size:11px;color:var(--text2);line-height:1.4}
+.backup-reminder-text strong{color:var(--orange)}
+.backup-reminder-btn{background:var(--orange);color:#111;border:none;padding:6px 12px;border-radius:var(--radius-xs);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.backup-reminder-dismiss{background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:4px;line-height:1}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
@@ -128,7 +171,7 @@ input[type="file"]{display:none}
 <script>
 // PWA
 let deferredInstallPrompt=null;
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(e=>console.log('SW fail:',e));}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(e=>console.log('SW reg skipped:',e.message));}
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('install-banner');if(b)b.classList.add('show');});
 function installApp(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.then(c=>{if(c.outcome==='accepted')showToast('App installed!');deferredInstallPrompt=null;const b=document.getElementById('install-banner');if(b)b.classList.remove('show');});}}
 function dismissInstall(){deferredInstallPrompt=null;const b=document.getElementById('install-banner');if(b)b.classList.remove('show');}
@@ -180,8 +223,9 @@ const WARMUPS={
 };
 const COOLDOWN=[{id:'cd_chest',label:'Door Frame Chest Stretch',detail:'2 × 30s/side'},{id:'cd_chintuck',label:'Chin Tucks',detail:'10 × 3s holds'},{id:'cd_pullapart',label:'Band Pull-Aparts',detail:'2 × 20 reps'},{id:'cd_dcf',label:'Deep Cervical Flexor Activation',detail:'10 × 5s holds'}];
 
-// SESSION NAMES
+// SESSION DEFINITIONS
 const SESSION_NAMES=['Push A — Strength','Pull A — Strength','Push B — Volume','Pull B — Volume','Push C — Skill','Pull C — Skill'];
+const SESSION_TYPES=['push','pull','push','pull','push','pull'];
 
 function getLevelData(chain,lv){const l=lv[chain]||0;return{...PROGS[chain].levels[l],chain,level:l};}
 
@@ -245,62 +289,179 @@ function buildSession(si,lv){
 const DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const LS_STATE='pp_v5_state';
-const LS_LOG_PREFIX='pp_v5_log:';
+const LS_STATE='pp_v6_state';
+const LS_LOG_PREFIX='pp_v6_log:';
+const LS_BACKUP_DISMISSED='pp_v6_backup_dismissed';
 
-let st={currentTab:'today',logs:{},completedSessions:0,levels:{ring_pushup:1,pullup:2,ring_dip:3,ring_row:1},viewDate:null,collapsed:{}};
+let st={
+  currentTab:'today',
+  logs:{},
+  completedSessions:0,
+  nextSessionType:0, // 0-5, tracks position in the 6-session rotation
+  levels:{ring_pushup:1,pullup:2,ring_dip:3,ring_row:1},
+  viewDate:null,
+  collapsed:{}
+};
 let pendingProgression=null;
+let showingSessionPicker=false;
 
 function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function parseDate(s){const p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function dateFmt(d){return DN[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate();}
 function todayStr(){return dk(new Date());}
 function getProgramWeek(){return Math.floor(st.completedSessions/6)+1;}
-function isDeloadSession(si){const w=Math.floor(si/6)+1;return w===4||w===8;}
-function getNextSessionIndex(){return st.completedSessions;}
-function isWorkoutLogged(dateStr){const log=st.logs[dateStr];if(!log)return false;return Object.keys(log).some(k=>!k.startsWith('_')&&!k.startsWith('wu_')&&!k.startsWith('cd_')&&log[k]!==''&&log[k]!==undefined);}
+function isDeloadWeek(sessionNum){const w=Math.floor(sessionNum/6)+1;return w===4||w===8;}
+function isWorkoutLogged(dateStr){const log=st.logs[dateStr];if(!log||!log._started)return false;return Object.keys(log).some(k=>!k.startsWith('_')&&!k.startsWith('wu_')&&!k.startsWith('cd_')&&log[k]!==''&&log[k]!==undefined);}
+function hasAnyData(dateStr){const log=st.logs[dateStr];return log&&log._started;}
 
+// Get session info for a date
 function getSessionForDate(dateStr){
   const log=st.logs[dateStr];
   const d=parseDate(dateStr);
   const dayName=DN[d.getDay()];
-  if(log&&log._sessionIndex!==undefined){
-    const si=log._sessionIndex;
+  
+  // If this date has a locked session, use it
+  if(log&&log._started&&log._sessionTypeIndex!==undefined){
+    const si=log._sessionTypeIndex;
     const session=buildSession(si,st.levels);
-    return{type:session.type,session,dayName,isDeload:isDeloadSession(si),sessionIndex:si};
+    const sessionNum=log._sessionNumber||st.completedSessions;
+    return{type:session.type,session,dayName,isDeload:isDeloadWeek(sessionNum),sessionIndex:si,sessionNumber:sessionNum,locked:true};
   }
+  
+  // For today or future with no log, show the suggested next session
   if(dateStr>=todayStr()){
-    const si=getNextSessionIndex();
+    const si=st.nextSessionType;
     const session=buildSession(si,st.levels);
-    return{type:session.type,session,dayName,isDeload:isDeloadSession(si),sessionIndex:si};
+    const sessionNum=st.completedSessions;
+    return{type:session.type,session,dayName,isDeload:isDeloadWeek(sessionNum),sessionIndex:si,sessionNumber:sessionNum,locked:false};
   }
-  return{type:'rest',session:null,dayName,isDeload:false,sessionIndex:null};
+  
+  // Past date with no workout = rest day
+  return{type:'rest',session:null,dayName,isDeload:false,sessionIndex:null,sessionNumber:null,locked:true};
 }
 
-// PERSISTENCE
-function saveState(){try{localStorage.setItem(LS_STATE,JSON.stringify({currentTab:st.currentTab,completedSessions:st.completedSessions,levels:st.levels,viewDate:st.viewDate,collapsed:st.collapsed}));}catch(e){}}
-function saveLog(dateStr){try{const log=st.logs[dateStr];if(log)localStorage.setItem(LS_LOG_PREFIX+dateStr,JSON.stringify(log));}catch(e){}}
-function deleteLogStorage(dateStr){try{localStorage.removeItem(LS_LOG_PREFIX+dateStr);}catch(e){}}
+// PERSISTENCE with error handling
+function saveState(){
+  try{
+    const data={
+      currentTab:st.currentTab,
+      completedSessions:st.completedSessions,
+      nextSessionType:st.nextSessionType,
+      levels:st.levels,
+      viewDate:st.viewDate,
+      collapsed:st.collapsed
+    };
+    localStorage.setItem(LS_STATE,JSON.stringify(data));
+  }catch(e){
+    console.error('Failed to save state:',e);
+    showToast('Storage error — data may not save','error');
+  }
+}
+
+function saveLog(dateStr){
+  try{
+    const log=st.logs[dateStr];
+    if(log)localStorage.setItem(LS_LOG_PREFIX+dateStr,JSON.stringify(log));
+  }catch(e){
+    console.error('Failed to save log:',e);
+    showToast('Storage error — workout may not save','error');
+  }
+}
+
+function deleteLogStorage(dateStr){
+  try{localStorage.removeItem(LS_LOG_PREFIX+dateStr);}catch(e){console.error('Failed to delete log:',e);}
+}
 
 function loadAll(){
-  try{const raw=localStorage.getItem(LS_STATE);if(raw){const s=JSON.parse(raw);st.currentTab=s.currentTab||'today';st.completedSessions=s.completedSessions||0;st.levels=s.levels||st.levels;st.collapsed=s.collapsed||{};}}catch(e){}
-  let hasV5=false;
-  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(LS_LOG_PREFIX)){try{st.logs[k.replace(LS_LOG_PREFIX,'')]=JSON.parse(localStorage.getItem(k));hasV5=true;}catch(e){}}}
-  // MIGRATE v4
-  if(!hasV5){
-    let migrated=false;
-    try{const os=localStorage.getItem('pp_v4_state');if(os){const o=JSON.parse(os);st.levels=o.levels||st.levels;}
-    for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('pp_v4_log:')){try{st.logs[k.replace('pp_v4_log:','')]=JSON.parse(localStorage.getItem(k));migrated=true;}catch(e){}}}}catch(e){}
-    if(!migrated){try{const old=localStorage.getItem('pp_v3');if(old){const o=JSON.parse(old);if(o.logs){st.logs=o.logs;st.levels=o.levels||st.levels;migrated=true;}}}catch(e){}}
-    if(!migrated){try{const old=localStorage.getItem('hv_v4');if(old){const o=JSON.parse(old);if(o.todayLog&&o.todayLog._date)st.logs[o.todayLog._date]={...o.todayLog};if(o.history)o.history.forEach(h=>{if(h._date)st.logs[h._date]={...h};});st.levels=o.levels||st.levels;migrated=true;}}catch(e){}}
-    if(migrated){
-      const wd=Object.keys(st.logs).filter(d=>isWorkoutLogged(d)).sort();
-      st.completedSessions=wd.length;
-      wd.forEach((d,i)=>{if(st.logs[d]._sessionIndex===undefined)st.logs[d]._sessionIndex=i;});
-      saveState();for(const d of Object.keys(st.logs))saveLog(d);
-      showToast('Migrated '+st.completedSessions+' workouts');
+  // Load state
+  try{
+    const raw=localStorage.getItem(LS_STATE);
+    if(raw){
+      const s=JSON.parse(raw);
+      st.currentTab=s.currentTab||'today';
+      st.completedSessions=s.completedSessions||0;
+      st.nextSessionType=s.nextSessionType!==undefined?s.nextSessionType:0;
+      st.levels=s.levels||st.levels;
+      st.collapsed=s.collapsed||{};
+    }
+  }catch(e){console.error('Failed to load state:',e);}
+  
+  // Load v6 logs
+  let hasV6=false;
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k&&k.startsWith(LS_LOG_PREFIX)){
+      try{
+        st.logs[k.replace(LS_LOG_PREFIX,'')]=JSON.parse(localStorage.getItem(k));
+        hasV6=true;
+      }catch(e){console.error('Failed to load log:',k,e);}
     }
   }
+  
+  // MIGRATE from v5
+  if(!hasV6){
+    let migrated=false;
+    try{
+      // Try v5
+      const v5State=localStorage.getItem('pp_v5_state');
+      if(v5State){
+        const s=JSON.parse(v5State);
+        st.levels=s.levels||st.levels;
+        st.completedSessions=s.completedSessions||0;
+      }
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k&&k.startsWith('pp_v5_log:')){
+          try{
+            const oldLog=JSON.parse(localStorage.getItem(k));
+            const dateStr=k.replace('pp_v5_log:','');
+            // Convert v5 log to v6 format
+            st.logs[dateStr]={
+              ...oldLog,
+              _started:true,
+              _sessionTypeIndex:oldLog._sessionIndex!==undefined?oldLog._sessionIndex%6:0,
+              _sessionNumber:oldLog._sessionIndex||0
+            };
+            migrated=true;
+          }catch(e){}
+        }
+      }
+    }catch(e){console.error('Migration error:',e);}
+    
+    // Try v4 if no v5
+    if(!migrated){
+      try{
+        const v4State=localStorage.getItem('pp_v4_state');
+        if(v4State){
+          const s=JSON.parse(v4State);
+          st.levels=s.levels||st.levels;
+        }
+        for(let i=0;i<localStorage.length;i++){
+          const k=localStorage.key(i);
+          if(k&&k.startsWith('pp_v4_log:')){
+            try{
+              const oldLog=JSON.parse(localStorage.getItem(k));
+              const dateStr=k.replace('pp_v4_log:','');
+              st.logs[dateStr]={...oldLog,_started:true,_sessionTypeIndex:0,_sessionNumber:0};
+              migrated=true;
+            }catch(e){}
+          }
+        }
+      }catch(e){}
+    }
+    
+    if(migrated){
+      // Recalculate completed sessions and next session type
+      const wd=Object.keys(st.logs).filter(d=>isWorkoutLogged(d)).sort();
+      st.completedSessions=wd.length;
+      st.nextSessionType=st.completedSessions%6;
+      saveState();
+      for(const d of Object.keys(st.logs))saveLog(d);
+      showToast('Migrated '+st.completedSessions+' workouts from previous version');
+    }
+  }
+  
+  // Defaults
   if(!st.levels)st.levels={ring_pushup:1,pullup:2,ring_dip:3,ring_row:1};
   if(!st.collapsed)st.collapsed={};
   st.viewDate=null;
@@ -308,126 +469,657 @@ function loadAll(){
 
 // HELPERS
 function getActiveDate(){return st.viewDate||todayStr();}
-function isViewingPast(){return st.viewDate&&st.viewDate!==todayStr();}
+function isViewingPast(){return st.viewDate&&st.viewDate<todayStr();}
+function isViewingFuture(){return st.viewDate&&st.viewDate>todayStr();}
 function getLog(date){if(!st.logs[date])st.logs[date]={_date:date};return st.logs[date];}
+
 function getWeek(){
   const ref=parseDate(getActiveDate()),ts=todayStr(),mon=new Date(ref);
   mon.setDate(ref.getDate()-((ref.getDay()+6)%7));
-  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);const k=dk(d);return{label:DS[d.getDay()],date:k,isToday:k===ts,isActive:k===getActiveDate(),done:isWorkoutLogged(k)};});
+  return Array.from({length:7},(_,i)=>{
+    const d=new Date(mon);
+    d.setDate(mon.getDate()+i);
+    const k=dk(d);
+    return{label:DS[d.getDay()],date:k,isToday:k===ts,isActive:k===getActiveDate(),done:isWorkoutLogged(k)};
+  });
 }
-function cntProg(session,dateStr,deload){if(!session)return{done:0,total:0};const log=st.logs[dateStr]||{};let d=0,t=0;session.pairs.forEach(p=>p.exercises.forEach(ex=>{const s=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;for(let i=0;i<s;i++){t++;if(log[ex.id+'_s'+i]!==undefined&&log[ex.id+'_s'+i]!=='')d++;}}));return{done:d,total:t};}
-function pairProg(pair,dateStr,deload){const log=st.logs[dateStr]||{};let d=0,t=0;pair.exercises.forEach(ex=>{const s=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;for(let i=0;i<s;i++){t++;if(log[ex.id+'_s'+i]!==undefined&&log[ex.id+'_s'+i]!=='')d++;}});return{done:d,total:t};}
-function countChecks(items,dateStr,prefix){const log=st.logs[dateStr]||{};let done=0;items.forEach(item=>{if(log[prefix+item.id])done++;});return{done,total:items.length};}
+
+function cntProg(session,dateStr,deload){
+  if(!session)return{done:0,total:0};
+  const log=st.logs[dateStr]||{};
+  let d=0,t=0;
+  session.pairs.forEach(p=>p.exercises.forEach(ex=>{
+    const s=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;
+    for(let i=0;i<s;i++){
+      t++;
+      if(log[ex.id+'_s'+i]!==undefined&&log[ex.id+'_s'+i]!=='')d++;
+    }
+  }));
+  return{done:d,total:t};
+}
+
+function pairProg(pair,dateStr,deload){
+  const log=st.logs[dateStr]||{};
+  let d=0,t=0;
+  pair.exercises.forEach(ex=>{
+    const s=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;
+    for(let i=0;i<s;i++){
+      t++;
+      if(log[ex.id+'_s'+i]!==undefined&&log[ex.id+'_s'+i]!=='')d++;
+    }
+  });
+  return{done:d,total:t};
+}
+
+function countChecks(items,dateStr,prefix){
+  const log=st.logs[dateStr]||{};
+  let done=0;
+  items.forEach(item=>{if(log[prefix+item.id])done++;});
+  return{done,total:items.length};
+}
+
 function isSectionCollapsed(dateStr,sid){return!!st.collapsed[dateStr+'_'+sid];}
-function toggleSection(dateStr,sid){st.collapsed[dateStr+'_'+sid]=!st.collapsed[dateStr+'_'+sid];saveState();const sy=window.scrollY;render();window.scrollTo(0,sy);}
+function toggleSection(dateStr,sid){
+  st.collapsed[dateStr+'_'+sid]=!st.collapsed[dateStr+'_'+sid];
+  saveState();
+  const sy=window.scrollY;
+  render();
+  window.scrollTo(0,sy);
+}
+
+// SESSION PICKER - Lock in a session for a date
+function startSession(dateStr,sessionTypeIndex){
+  const log=getLog(dateStr);
+  log._started=true;
+  log._sessionTypeIndex=sessionTypeIndex;
+  log._sessionNumber=st.completedSessions;
+  log._dayName=DN[parseDate(dateStr).getDay()];
+  
+  const session=buildSession(sessionTypeIndex,st.levels);
+  log._sessionName=session.name;
+  log._type=session.type;
+  
+  saveLog(dateStr);
+  showingSessionPicker=false;
+  render();
+}
+
+function showSessionPickerUI(){
+  showingSessionPicker=true;
+  render();
+}
+
+function hideSessionPickerUI(){
+  showingSessionPicker=false;
+  render();
+}
 
 // AUTO-PROGRESSION
-function checkProgression(dateStr,exId,chain,numSets){if(!chain)return;const cl=st.levels[chain],ml=PROGS[chain].levels.length-1;if(cl>=ml)return;const target=PROGS[chain].levels[cl].targetReps;const log=st.logs[dateStr]||{};let allM=true,any=false;for(let i=0;i<numSets;i++){const v=log[exId+'_s'+i];if(v===undefined||v===''){allM=false;break;}any=true;if(parseInt(v)<target){allM=false;break;}}if(allM&&any&&!pendingProgression){pendingProgression={chain,fromLevel:cl,toLevel:cl+1};showProgressionModal();}}
-function showProgressionModal(){if(!pendingProgression)return;const{chain,fromLevel,toLevel}=pendingProgression;const prog=PROGS[chain],from=prog.levels[fromLevel],to=prog.levels[toLevel];const ex=document.getElementById('prog-modal');if(ex)ex.remove();const ov=document.createElement('div');ov.className='modal-overlay';ov.id='prog-modal';ov.innerHTML='<div class="modal"><div class="modal-icon">🏆</div><div class="modal-title">Progression Unlocked!</div><div class="modal-sub">You hit target reps on all sets for<br><strong>'+prog.label+'</strong>.</div><div class="modal-detail">All sets at '+from.targetReps+'+ reps — next level earned.</div><div class="modal-from">Level '+(fromLevel+1)+': '+from.name+'</div><div class="modal-arrow">↓</div><div class="modal-to">Level '+(toLevel+1)+': '+to.name+' ('+to.reps+')</div><div class="modal-btns"><button class="btn btn-later" onclick="dismissProgression()">Not Yet</button><button class="btn btn-confirm" onclick="confirmProgression()">Level Up ✓</button></div></div>';document.body.appendChild(ov);}
-function confirmProgression(){if(!pendingProgression)return;const{chain,toLevel}=pendingProgression;st.levels[chain]=toLevel;pendingProgression=null;saveState();dismissModal();showToast(PROGS[chain].label+' → Level '+(toLevel+1)+': '+PROGS[chain].levels[toLevel].name);render();}
+function checkProgression(dateStr,exId,chain,numSets){
+  if(!chain)return;
+  const cl=st.levels[chain],ml=PROGS[chain].levels.length-1;
+  if(cl>=ml)return;
+  const target=PROGS[chain].levels[cl].targetReps;
+  const log=st.logs[dateStr]||{};
+  let allM=true,any=false;
+  for(let i=0;i<numSets;i++){
+    const v=log[exId+'_s'+i];
+    if(v===undefined||v===''){allM=false;break;}
+    any=true;
+    if(parseInt(v)<target){allM=false;break;}
+  }
+  if(allM&&any&&!pendingProgression){
+    pendingProgression={chain,fromLevel:cl,toLevel:cl+1};
+    showProgressionModal();
+  }
+}
+
+function showProgressionModal(){
+  if(!pendingProgression)return;
+  const{chain,fromLevel,toLevel}=pendingProgression;
+  const prog=PROGS[chain],from=prog.levels[fromLevel],to=prog.levels[toLevel];
+  const ex=document.getElementById('prog-modal');
+  if(ex)ex.remove();
+  const ov=document.createElement('div');
+  ov.className='modal-overlay';
+  ov.id='prog-modal';
+  ov.innerHTML='<div class="modal"><div class="modal-icon">🏆</div><div class="modal-title">Progression Unlocked!</div><div class="modal-sub">You hit target reps on all sets for<br><strong>'+prog.label+'</strong>.</div><div class="modal-detail">All sets at '+from.targetReps+'+ reps — next level earned.</div><div class="modal-from">Level '+(fromLevel+1)+': '+from.name+'</div><div class="modal-arrow">↓</div><div class="modal-to">Level '+(toLevel+1)+': '+to.name+' ('+to.reps+')</div><div class="modal-btns"><button class="btn btn-later" onclick="dismissProgression()">Not Yet</button><button class="btn btn-confirm" onclick="confirmProgression()">Level Up ✓</button></div></div>';
+  document.body.appendChild(ov);
+}
+
+function confirmProgression(){
+  if(!pendingProgression)return;
+  const{chain,toLevel}=pendingProgression;
+  st.levels[chain]=toLevel;
+  pendingProgression=null;
+  saveState();
+  dismissModal();
+  showToast(PROGS[chain].label+' → Level '+(toLevel+1)+': '+PROGS[chain].levels[toLevel].name);
+  render();
+}
+
 function dismissProgression(){pendingProgression=null;dismissModal();}
 function dismissModal(){const m=document.getElementById('prog-modal');if(m)m.remove();}
 
+// BACKUP REMINDER
+function shouldShowBackupReminder(){
+  if(st.completedSessions<3)return false;
+  const dismissed=localStorage.getItem(LS_BACKUP_DISMISSED);
+  if(dismissed){
+    const dismissedDate=new Date(dismissed);
+    const daysSince=(Date.now()-dismissedDate.getTime())/(1000*60*60*24);
+    if(daysSince<7)return false; // Show again after 7 days
+  }
+  return true;
+}
+
+function dismissBackupReminder(){
+  localStorage.setItem(LS_BACKUP_DISMISSED,new Date().toISOString());
+  render();
+}
+
 // RENDER
-function render(){const app=document.getElementById('app');if(st.currentTab==='today')renderToday(app);else if(st.currentTab==='levels')renderLevels(app);else if(st.currentTab==='history')renderHistory(app);else if(st.currentTab==='data')renderData(app);}
-function renderTabs(){return'<div class="tabs"><button class="tab '+(st.currentTab==='today'?'active':'')+'" onclick="switchTab(\'today\')">Workout</button><button class="tab '+(st.currentTab==='levels'?'active':'')+'" onclick="switchTab(\'levels\')">Levels</button><button class="tab '+(st.currentTab==='history'?'active':'')+'" onclick="switchTab(\'history\')">History</button><button class="tab '+(st.currentTab==='data'?'active':'')+'" onclick="switchTab(\'data\')">Data</button></div>';}
-function renderChecklistSection(items,dateStr,prefix,tagClass,tagLabel,sectionTitle,sectionId){const log=st.logs[dateStr]||{};const cnt=countChecks(items,dateStr,prefix);const col=isSectionCollapsed(dateStr,sectionId);let h='<div class="workout-section"><div class="section-header" onclick="toggleSection(\''+dateStr+"','"+sectionId+'\')"><h3><span class="section-tag '+tagClass+'">'+tagLabel+'</span> '+sectionTitle+'</h3><span class="section-progress">'+cnt.done+'/'+cnt.total+' '+(col?'▸':'▾')+'</span></div><div class="section-body'+(col?' collapsed':'')+'">';items.forEach(item=>{const checked=!!log[prefix+item.id];h+='<div class="check-item '+(checked?'checked':'')+'" onclick="toggleCheck(\''+dateStr+"','"+prefix+item.id+'\')"><div class="check-box"></div><span class="check-label">'+item.label+'</span><span class="check-detail">'+item.detail+'</span></div>';});h+='</div></div>';return h;}
+function render(){
+  const app=document.getElementById('app');
+  if(st.currentTab==='today')renderToday(app);
+  else if(st.currentTab==='levels')renderLevels(app);
+  else if(st.currentTab==='history')renderHistory(app);
+  else if(st.currentTab==='data')renderData(app);
+}
+
+function renderTabs(){
+  return'<div class="tabs" role="tablist"><button class="tab '+(st.currentTab==='today'?'active':'')+'" onclick="switchTab(\'today\')" role="tab" aria-selected="'+(st.currentTab==='today')+'">Workout</button><button class="tab '+(st.currentTab==='levels'?'active':'')+'" onclick="switchTab(\'levels\')" role="tab" aria-selected="'+(st.currentTab==='levels')+'">Levels</button><button class="tab '+(st.currentTab==='history'?'active':'')+'" onclick="switchTab(\'history\')" role="tab" aria-selected="'+(st.currentTab==='history')+'">History</button><button class="tab '+(st.currentTab==='data'?'active':'')+'" onclick="switchTab(\'data\')" role="tab" aria-selected="'+(st.currentTab==='data')+'">Data</button></div>';
+}
+
+function renderChecklistSection(items,dateStr,prefix,tagClass,tagLabel,sectionTitle,sectionId){
+  const log=st.logs[dateStr]||{};
+  const cnt=countChecks(items,dateStr,prefix);
+  const col=isSectionCollapsed(dateStr,sectionId);
+  let h='<div class="workout-section"><div class="section-header" onclick="toggleSection(\''+dateStr+"','"+sectionId+'\')" tabindex="0" role="button" aria-expanded="'+(!col)+'"><h3><span class="section-tag '+tagClass+'">'+tagLabel+'</span> '+sectionTitle+'</h3><span class="section-progress">'+cnt.done+'/'+cnt.total+' '+(col?'▸':'▾')+'</span></div><div class="section-body'+(col?' collapsed':'')+'">';
+  items.forEach(item=>{
+    const checked=!!log[prefix+item.id];
+    h+='<div class="check-item '+(checked?'checked':'')+'" onclick="toggleCheck(\''+dateStr+"','"+prefix+item.id+'\')" tabindex="0" role="checkbox" aria-checked="'+checked+'"><div class="check-box"></div><span class="check-label">'+item.label+'</span><span class="check-detail">'+item.detail+'</span></div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+function renderSessionPicker(dateStr,suggestedIndex){
+  const suggested=buildSession(suggestedIndex,st.levels);
+  const suggestedType=SESSION_TYPES[suggestedIndex];
+  
+  let h='<div class="session-picker">';
+  h+='<div class="session-picker-title">Choose Today\'s Session</div>';
+  h+='<div class="session-picker-sub">Missed a day? Pick where to resume. The sequence continues from your choice.</div>';
+  
+  h+='<div class="session-picker-suggested">';
+  h+='<div style="flex:1"><div class="sps-label">Suggested Next</div><div class="sps-name">'+suggested.name+'</div></div>';
+  h+='<span class="sps-type '+suggestedType+'">'+suggestedType.toUpperCase()+'</span>';
+  h+='</div>';
+  
+  h+='<div class="session-picker-btns">';
+  h+='<button class="btn btn-primary" onclick="startSession(\''+dateStr+'\','+suggestedIndex+')">Start '+suggested.name.split(' — ')[0]+'</button>';
+  h+='</div>';
+  
+  h+='<div style="font-size:11px;color:var(--text3);text-align:center;margin:10px 0 6px">— or pick a different session —</div>';
+  
+  h+='<div class="session-picker-grid">';
+  for(let i=0;i<6;i++){
+    if(i===suggestedIndex)continue;
+    const s=buildSession(i,st.levels);
+    const t=SESSION_TYPES[i];
+    h+='<div class="session-option '+t+'-opt" onclick="startSession(\''+dateStr+'\','+i+')" tabindex="0" role="button">';
+    h+='<div class="so-name">'+s.name.split(' — ')[0]+'</div>';
+    h+='<div class="so-detail">'+s.name.split(' — ')[1]+' · '+t.toUpperCase()+'</div>';
+    h+='</div>';
+  }
+  h+='</div>';
+  h+='</div>';
+  return h;
+}
 
 function renderToday(app){
-  const dateStr=getActiveDate(),info=getSessionForDate(dateStr),{type,session,dayName,isDeload,sessionIndex}=info;
-  const week=getWeek(),prog=cntProg(session,dateStr,isDeload),past=isViewingPast(),d=parseDate(dateStr);
-  const sn=sessionIndex!==null?sessionIndex+1:null;
-  const wk=sessionIndex!==null?Math.floor(sessionIndex/6)+1:getProgramWeek();
-  let h='<div class="header"><h1>PUSH / PULL TRACKER</h1><div class="subtitle">Week '+wk+' of 8'+(isDeload?' · DELOAD':'')+' · Session '+(sn||'—')+'/48</div></div>';
-  h+='<div class="week-nav"><button class="week-nav-btn" onclick="navigateWeek(-1)">‹</button><div class="week-bar">'+week.map(w=>'<div class="week-dot '+(w.done?'done':'')+' '+(w.isToday?'today':'')+' '+(w.isActive&&!w.isToday?'selected':'')+'" onclick="goToDate(\''+w.date+'\')"><span class="week-dot-label">'+w.label+'</span></div>').join('')+'</div><button class="week-nav-btn" onclick="navigateWeek(1)">›</button></div><div style="height:14px"></div>';
+  const dateStr=getActiveDate();
+  const info=getSessionForDate(dateStr);
+  const{type,session,dayName,isDeload,sessionIndex,sessionNumber,locked}=info;
+  const week=getWeek();
+  const prog=cntProg(session,dateStr,isDeload);
+  const past=isViewingPast();
+  const future=isViewingFuture();
+  const d=parseDate(dateStr);
+  
+  const wk=Math.floor((sessionNumber||st.completedSessions)/6)+1;
+  const sn=(sessionNumber||st.completedSessions)+1;
+  
+  let h='<div class="header"><h1>PUSH / PULL TRACKER</h1><div class="subtitle">Week '+wk+' of 8'+(isDeload?' · DELOAD':'')+' · Session '+sn+'/48</div></div>';
+  
+  h+='<div class="week-nav"><button class="week-nav-btn" onclick="navigateWeek(-1)" aria-label="Previous week">‹</button><div class="week-bar">'+week.map(w=>'<div class="week-dot '+(w.done?'done':'')+' '+(w.isToday?'today':'')+' '+(w.isActive&&!w.isToday?'selected':'')+'" onclick="goToDate(\''+w.date+'\')" role="button" aria-label="'+w.label+(w.done?' completed':'')+'"><span class="week-dot-label">'+w.label+'</span></div>').join('')+'</div><button class="week-nav-btn" onclick="navigateWeek(1)" aria-label="Next week">›</button></div><div style="height:14px"></div>';
+  
   h+=renderTabs();
+  
+  // Install banner
   h+='<div id="install-banner" class="install-banner '+(deferredInstallPrompt?'show':'')+'"><p>📱 Install as an app for offline access.</p><button class="btn-install" onclick="installApp()">Install App</button><button class="btn-dismiss" onclick="dismissInstall()">Not now</button></div>';
-  h+='<div class="date-picker-bar"><label>DATE</label><input type="date" value="'+dateStr+'" onchange="goToDate(this.value)">'+(past?'<button class="btn-today" onclick="goToDate(\''+todayStr()+'\')">Today</button>':'')+'</div>';
-  h+='<div class="today-card '+type+'"><div class="today-label">'+dateFmt(d)+'</div><div class="today-title">'+dayName+(past?'<span class="past-badge">PAST</span>':'')+'</div><span class="today-type '+(type==='push'?'push-type':type==='pull'?'pull-type':'rest-type')+'">'+(type==='push'?'↑ PUSH':type==='pull'?'↓ PULL':'☀ REST')+'</span>'+(session?'<div class="today-meta"><span>'+session.name+'</span><span>✓ '+prog.done+'/'+prog.total+' sets</span></div>':'')+'</div>';
+  
+  // Backup reminder
+  if(shouldShowBackupReminder()&&st.currentTab==='today'){
+    h+='<div class="backup-reminder"><span class="backup-reminder-icon">💾</span><div class="backup-reminder-text"><strong>'+st.completedSessions+' workouts</strong> stored locally. Export a backup to avoid data loss.</div><button class="backup-reminder-btn" onclick="switchTab(\'data\')">Backup</button><button class="backup-reminder-dismiss" onclick="dismissBackupReminder()" aria-label="Dismiss">×</button></div>';
+  }
+  
+  h+='<div class="date-picker-bar"><label>DATE</label><input type="date" value="'+dateStr+'" onchange="goToDate(this.value)">'+(past||future?'<button class="btn-today" onclick="goToDate(\''+todayStr()+'\')">Today</button>':'')+'</div>';
+  
+  // Session picker for unlocked days (today or future without a started session)
+  if(!locked&&!past&&(showingSessionPicker||!hasAnyData(dateStr))){
+    h+='<div class="today-card '+type+'"><div class="today-label">'+dateFmt(d)+'</div><div class="today-title">'+dayName+'</div></div>';
+    h+=renderSessionPicker(dateStr,sessionIndex);
+    app.innerHTML=h;
+    return;
+  }
+  
+  // Regular workout view
+  h+='<div class="today-card '+type+'"><div class="today-label">'+dateFmt(d)+'</div><div class="today-title">'+dayName+(past?'<span class="past-badge">PAST</span>':'')+'</div><span class="today-type '+(type==='push'?'push-type':type==='pull'?'pull-type':'rest-type')+'\">'+(type==='push'?'↑ PUSH':type==='pull'?'↓ PULL':'☀ REST')+'</span>'+(session?'<div class="today-meta"><span>'+session.name+'</span><span>✓ '+prog.done+'/'+prog.total+' sets</span></div>':'')+'</div>';
+  
   if(isDeload&&type!=='rest')h+='<div class="deload-banner"><h3>⚡ DELOAD WEEK</h3><p>2 sets instead of 3. Same intensity, less volume.</p></div>';
+  
   if(type==='rest'){
     h+='<div class="rest-message"><div class="rest-emoji">🌿</div><div class="rest-title">Rest Day</div><div class="rest-sub">No workout logged. Do the posture routine below.</div></div>';
     h+=renderChecklistSection(COOLDOWN,dateStr,'cd_','tag-cool','POSTURE','Daily Posture Routine','cooldown');
   }else{
     h+=renderChecklistSection(WARMUPS[type]||[],dateStr,'wu_','tag-warm','WARM-UP',type==='push'?'Push Warm-Up (4 min)':'Pull Warm-Up (4 min)','warmup');
-    session.pairs.forEach(pair=>{const pp=pairProg(pair,dateStr,isDeload);const tc=pair.tag==='push'?'tag-push':pair.tag==='pull'?'tag-pull':pair.tag==='fin'?'tag-fin':'tag-acc';const sid='pair_'+pair.name.replace(/\s/g,'_');const col=isSectionCollapsed(dateStr,sid);h+='<div class="workout-section"><div class="section-header" onclick="toggleSection(\''+dateStr+"','"+sid+'\')"><h3><span class="section-tag '+tc+'">'+pair.tagLabel+'</span> '+pair.name+'</h3><span class="section-progress">'+pp.done+'/'+pp.total+' '+(col?'▸':'▾')+'</span></div><div class="section-body'+(col?' collapsed':'')+'">';pair.exercises.forEach(ex=>{h+=renderEx(ex,isDeload,dateStr);});h+='</div></div>';});
+    
+    session.pairs.forEach(pair=>{
+      const pp=pairProg(pair,dateStr,isDeload);
+      const tc=pair.tag==='push'?'tag-push':pair.tag==='pull'?'tag-pull':pair.tag==='fin'?'tag-fin':'tag-acc';
+      const sid='pair_'+pair.name.replace(/\s/g,'_');
+      const col=isSectionCollapsed(dateStr,sid);
+      h+='<div class="workout-section"><div class="section-header" onclick="toggleSection(\''+dateStr+"','"+sid+'\')" tabindex="0" role="button" aria-expanded="'+(!col)+'"><h3><span class="section-tag '+tc+'">'+pair.tagLabel+'</span> '+pair.name+'</h3><span class="section-progress">'+pp.done+'/'+pp.total+' '+(col?'▸':'▾')+'</span></div><div class="section-body'+(col?' collapsed':'')+'">';
+      pair.exercises.forEach(ex=>{h+=renderEx(ex,isDeload,dateStr);});
+      h+='</div></div>';
+    });
+    
     h+=renderChecklistSection(COOLDOWN,dateStr,'cd_','tag-cool','COOL-DOWN','Posture & Recovery (5 min)','cooldown');
   }
-  h+='<div class="action-bar"><button class="btn btn-secondary" title="Session '+(sn)+'/48">S'+(sn||'—')+'</button><button class="btn btn-primary" onclick="finishWorkout()" '+(prog.done===0&&type!=='rest'?'disabled':'')+'>'+(type==='rest'?'✓ Done':prog.done>=prog.total?'✓ Complete':'Save ('+prog.done+'/'+prog.total+')')+'</button></div>';
+  
+  // Action bar with change session button for today
+  const canChange=dateStr===todayStr()&&!isWorkoutLogged(dateStr);
+  h+='<div class="action-bar">';
+  if(canChange){
+    h+='<button class="btn btn-secondary" onclick="showSessionPickerUI()" title="Change session type">Change</button>';
+  }else{
+    h+='<button class="btn btn-secondary" title="Session '+(sn)+'/48">S'+(sn||'—')+'</button>';
+  }
+  h+='<button class="btn btn-primary" onclick="finishWorkout()" '+(prog.done===0&&type!=='rest'?'disabled':'')+'>'+(type==='rest'?'✓ Done':prog.done>=prog.total?'✓ Complete':'Save ('+prog.done+'/'+prog.total+')')+'</button></div>';
+  
   app.innerHTML=h;
 }
 
 function renderEx(ex,deload,dateStr){
-  const log=st.logs[dateStr]||{};const as=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;
-  let allDone=true;for(let s=0;s<as;s++){if(log[ex.id+'_s'+s]===undefined||log[ex.id+'_s'+s]==='')allDone=false;}
+  const log=st.logs[dateStr]||{};
+  const as=(deload&&!ex.isFinisher)?Math.min(2,ex.sets):ex.sets;
+  let allDone=true;
+  for(let s=0;s<as;s++){
+    if(log[ex.id+'_s'+s]===undefined||log[ex.id+'_s'+s]==='')allDone=false;
+  }
+  
   let dn=ex.name,dr=ex.reps,dno=ex.notes;
   let lbh='';
-  if(ex.chain){const ch=PROGS[ex.chain],lv=st.levels[ex.chain]||0,tgt=ch.levels[lv].targetReps;let sm=0;for(let s=0;s<as;s++){const v=log[ex.id+'_s'+s];if(v!==undefined&&v!==''&&parseInt(v)>=tgt)sm++;}const pct=Math.min(100,Math.round(sm/as*100)),full=sm>=as,mx=lv>=ch.levels.length-1;
-  lbh='<div class="level-badge-row"><div class="level-badge"><span class="lvl-num">Lv'+(lv+1)+'</span><span class="lvl-sep">·</span><span class="lvl-name">'+ch.levels[lv].name+'</span></div>'+(!mx?'<div class="lvl-progress-wrap"><div class="lvl-progress-bar'+(full?' full':'')+'" style="width:'+pct+'%"></div></div><span class="lvl-progress-label">'+sm+'/'+as+'</span>':'<span class="lvl-progress-label" style="color:var(--accent2)">MAX LVL</span>')+'</div>';}
+  
+  if(ex.chain){
+    const ch=PROGS[ex.chain],lv=st.levels[ex.chain]||0,tgt=ch.levels[lv].targetReps;
+    let sm=0;
+    for(let s=0;s<as;s++){
+      const v=log[ex.id+'_s'+s];
+      if(v!==undefined&&v!==''&&parseInt(v)>=tgt)sm++;
+    }
+    const pct=Math.min(100,Math.round(sm/as*100)),full=sm>=as,mx=lv>=ch.levels.length-1;
+    lbh='<div class="level-badge-row"><div class="level-badge"><span class="lvl-num">Lv'+(lv+1)+'</span><span class="lvl-sep">·</span><span class="lvl-name">'+ch.levels[lv].name+'</span></div>'+(!mx?'<div class="lvl-progress-wrap"><div class="lvl-progress-bar'+(full?' full':'')+'" style="width:'+pct+'%"></div></div><span class="lvl-progress-label">'+sm+'/'+as+'</span>':'<span class="lvl-progress-label" style="color:var(--accent2)">MAX LVL</span>')+'</div>';
+  }
+  
   let skh='';
-  if(ex.skillPick&&ex.skillOptions){const chosen=log['_skill_'+ex.skillPick]||ex.skillOptions[0].value;const sel=ex.skillOptions.find(o=>o.value===chosen)||ex.skillOptions[0];dn=sel.label;dr=sel.reps;dno=sel.notes;
-  skh='<div class="level-badge-row" style="margin-bottom:8px"><span class="lvl-progress-label" style="white-space:nowrap;color:var(--text2)">VARIATION</span><select style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-xs);padding:5px 8px;font-size:11px;font-family:\'DM Sans\',sans-serif;outline:none" onchange="setSkillPick(\''+dateStr+"','"+ex.skillPick+'\',this.value)">'+ex.skillOptions.map(o=>'<option value="'+o.value+'" '+(o.value===chosen?'selected':'')+'>'+o.label+' ('+o.reps+')</option>').join('')+'</select></div>';}
+  if(ex.skillPick&&ex.skillOptions){
+    const chosen=log['_skill_'+ex.skillPick]||ex.skillOptions[0].value;
+    const sel=ex.skillOptions.find(o=>o.value===chosen)||ex.skillOptions[0];
+    dn=sel.label;dr=sel.reps;dno=sel.notes;
+    skh='<div class="level-badge-row" style="margin-bottom:8px"><span class="lvl-progress-label" style="white-space:nowrap;color:var(--text2)">VARIATION</span><select style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-xs);padding:5px 8px;font-size:11px;font-family:\'DM Sans\',sans-serif;outline:none" onchange="setSkillPick(\''+dateStr+"','"+ex.skillPick+'\',this.value)">'+ex.skillOptions.map(o=>'<option value="'+o.value+'" '+(o.value===chosen?'selected':'')+'>'+o.label+' ('+o.reps+')</option>').join('')+'</select></div>';
+  }
+  
   let sh='';
-  if(ex.isFinisher){const v=log[ex.id+'_s0']||'';sh='<div class="finisher-input"><label>'+(dr==='MAX sec'?'Seconds:':'Reps:')+'</label><input type="number" inputmode="numeric" value="'+v+'" placeholder="—" onchange="logSet(\''+dateStr+"','"+ex.id+'\',0,this.value,null,null)" onfocus="this.select()"></div>';}
-  else{const tgt=ex.chain?PROGS[ex.chain].levels[st.levels[ex.chain]||0].targetReps:null;sh='<div class="sets-row">';for(let s=0;s<as;s++){const k=ex.id+'_s'+s,v=log[k],done=v!==undefined&&v!=='',maxed=done&&tgt!==null&&parseInt(v)>=tgt;sh+='<div class="set-btn '+(maxed?'maxed':done?'done':'')+'" onclick="this.querySelector(\'.set-input\').focus()"><span class="set-label">Set '+(s+1)+'</span><input class="set-input" type="number" inputmode="numeric" value="'+(v!==undefined?v:'')+'" placeholder="—" onchange="logSet(\''+dateStr+"','"+ex.id+"',"+s+",this.value,'"+(ex.chain||'')+"',"+as+')" onfocus="this.select()"></div>';}sh+='</div>';}
+  if(ex.isFinisher){
+    const v=log[ex.id+'_s0']||'';
+    sh='<div class="finisher-input"><label>'+(dr==='MAX sec'?'Seconds:':'Reps:')+'</label><input type="number" inputmode="numeric" min="0" max="9999" value="'+v+'" placeholder="—" onchange="logSet(\''+dateStr+"','"+ex.id+'\',0,this.value,null,null)" onfocus="this.select()"></div>';
+  }else{
+    const tgt=ex.chain?PROGS[ex.chain].levels[st.levels[ex.chain]||0].targetReps:null;
+    sh='<div class="sets-row">';
+    for(let s=0;s<as;s++){
+      const k=ex.id+'_s'+s,v=log[k],done=v!==undefined&&v!=='',maxed=done&&tgt!==null&&parseInt(v)>=tgt;
+      sh+='<div class="set-btn '+(maxed?'maxed':done?'done':'')+'" onclick="this.querySelector(\'.set-input\').focus()"><span class="set-label">Set '+(s+1)+'</span><input class="set-input" type="number" inputmode="numeric" min="0" max="999" value="'+(v!==undefined?v:'')+'" placeholder="—" onchange="logSet(\''+dateStr+"','"+ex.id+"',"+s+",this.value,'"+(ex.chain||'')+"',"+as+')" onfocus="this.select()"></div>';
+    }
+    sh+='</div>';
+  }
+  
   return'<div class="exercise '+(allDone?'completed':'')+'"><div class="exercise-top"><span class="exercise-name">'+dn+'</span><span class="exercise-target">'+as+'×'+dr+'</span></div>'+lbh+skh+'<div class="exercise-notes">'+dno+(ex.rest!=='—'?' | Rest: '+ex.rest:'')+'</div>'+sh+'</div>';
 }
 
 function renderLevels(app){
   let h='<div class="header"><h1>PUSH / PULL TRACKER</h1><div class="subtitle">Progression Levels</div></div>'+renderTabs();
   h+='<div class="level-hint">Move <strong>up or down freely</strong> to match your current ability. Auto-progression triggers during workouts when you hit all sets at the target reps.<br><br><strong>Rule:</strong> 3 × target reps with good form and 1–2 RIR = advance one level.</div>';
-  Object.keys(PROGS).forEach(chain=>{const p=PROGS[chain],lv=st.levels[chain]||0;h+='<div class="prog-card"><div class="prog-card-title">'+p.label+' Progression</div><div class="prog-card-sub">Current: <strong style="color:var(--accent)">Level '+(lv+1)+' — '+p.levels[lv].name+'</strong> · Target: '+p.levels[lv].targetReps+'+ reps/set</div>';p.levels.forEach((l,i)=>{const cls=i===lv?'active':i<lv?'past':'future';h+='<div class="prog-chain-item '+cls+'" onclick="setLevelManual(\''+chain+"',"+i+')"><span class="prog-num">'+(i+1)+'</span><span class="prog-chain-name">'+l.name+'</span><span class="prog-chain-reps">'+l.reps+'</span><span class="prog-chain-check">'+(i===lv?'◉':i<lv?'✓':'○')+'</span></div>';});h+='</div>';});
-  h+='<div style="height:20px"></div>';app.innerHTML=h;
+  
+  Object.keys(PROGS).forEach(chain=>{
+    const p=PROGS[chain],lv=st.levels[chain]||0;
+    h+='<div class="prog-card"><div class="prog-card-title">'+p.label+' Progression</div><div class="prog-card-sub">Current: <strong style="color:var(--accent)">Level '+(lv+1)+' — '+p.levels[lv].name+'</strong> · Target: '+p.levels[lv].targetReps+'+ reps/set</div>';
+    p.levels.forEach((l,i)=>{
+      const cls=i===lv?'active':i<lv?'past':'future';
+      h+='<div class="prog-chain-item '+cls+'" onclick="setLevelManual(\''+chain+"',"+i+')" tabindex="0" role="button"><span class="prog-num">'+(i+1)+'</span><span class="prog-chain-name">'+l.name+'</span><span class="prog-chain-reps">'+l.reps+'</span><span class="prog-chain-check">'+(i===lv?'◉':i<lv?'✓':'○')+'</span></div>';
+    });
+    h+='</div>';
+  });
+  
+  h+='<div style="height:20px"></div>';
+  app.innerHTML=h;
 }
 
 function renderHistory(app){
   let h='<div class="header"><h1>PUSH / PULL TRACKER</h1><div class="subtitle">Workout History</div></div>'+renderTabs();
   const dates=Object.keys(st.logs).filter(d=>isWorkoutLogged(d)).sort((a,b)=>b.localeCompare(a));
-  if(dates.length===0){h+='<div class="rest-message"><div class="rest-emoji">📝</div><div class="rest-title">No history yet</div><div class="rest-sub">Complete a workout to see it here.</div></div>';}
-  else{dates.forEach(dateStr=>{const log=st.logs[dateStr],sets=Object.keys(log).filter(k=>!k.startsWith('_')&&!k.startsWith('wu_')&&!k.startsWith('cd_')),reps=sets.reduce((s,k)=>s+(parseInt(log[k])||0),0);const si=log._sessionIndex,wk=si!==undefined?'Wk '+(Math.floor(si/6)+1):'',sName=log._sessionName||(si!==undefined?SESSION_NAMES[si%6]:'Workout');h+='<div class="history-card" onclick="goToDate(\''+dateStr+'\');switchTab(\'today\')"><div class="history-date">'+dateStr+' · '+(log._dayName||'')+(wk?' · '+wk:'')+'</div><div class="history-title">'+sName+(si!==undefined?' (#'+(si+1)+')':'')+'</div><div class="history-stats"><span class="history-stat"><strong>'+sets.length+'</strong> sets</span><span class="history-stat"><strong>'+reps+'</strong> total reps</span>'+(log._finisher?'<span class="history-stat">Finisher: <strong>'+log._finisher+'</strong></span>':'')+'</div><div class="history-actions"><button class="history-del" onclick="event.stopPropagation();deleteLog(\''+dateStr+'\')">Delete</button></div></div>';});}
-  h+='<div style="height:70px"></div>';app.innerHTML=h;
+  
+  if(dates.length===0){
+    h+='<div class="rest-message"><div class="rest-emoji">📝</div><div class="rest-title">No history yet</div><div class="rest-sub">Complete a workout to see it here.</div></div>';
+  }else{
+    dates.forEach(dateStr=>{
+      const log=st.logs[dateStr];
+      const sets=Object.keys(log).filter(k=>!k.startsWith('_')&&!k.startsWith('wu_')&&!k.startsWith('cd_'));
+      const reps=sets.reduce((s,k)=>s+(parseInt(log[k])||0),0);
+      const sn=log._sessionNumber;
+      const wk=sn!==undefined?'Wk '+(Math.floor(sn/6)+1):'';
+      const sName=log._sessionName||'Workout';
+      h+='<div class="history-card" onclick="goToDate(\''+dateStr+'\');switchTab(\'today\')"><div class="history-date">'+dateStr+' · '+(log._dayName||'')+(wk?' · '+wk:'')+'</div><div class="history-title">'+sName+(sn!==undefined?' (#'+(sn+1)+')':'')+'</div><div class="history-stats"><span class="history-stat"><strong>'+sets.length+'</strong> sets</span><span class="history-stat"><strong>'+reps+'</strong> total reps</span>'+(log._finisher?'<span class="history-stat">Finisher: <strong>'+log._finisher+'</strong></span>':'')+'</div><div class="history-actions"><button class="history-del" onclick="event.stopPropagation();deleteLog(\''+dateStr+'\')">Delete</button></div></div>';
+    });
+  }
+  
+  h+='<div style="height:70px"></div>';
+  app.innerHTML=h;
 }
 
 function renderData(app){
-  const pw=getProgramWeek(),nsi=getNextSessionIndex(),nn=SESSION_NAMES[nsi%6];
+  const pw=getProgramWeek();
+  const nn=SESSION_NAMES[st.nextSessionType];
+  
   let h='<div class="header"><h1>PUSH / PULL TRACKER</h1><div class="subtitle">Import & Export</div></div>'+renderTabs();
-  h+='<div class="data-section"><h3>📊 Program Progress</h3><p><strong>'+st.completedSessions+'</strong> of 48 sessions completed · Week <strong>'+pw+'</strong> of 8<br>Next session: <strong>'+nn+'</strong> (#'+(nsi+1)+')</p><div class="session-index-control"><label>SESSION #</label><input type="number" value="'+st.completedSessions+'" min="0" max="48" onchange="setSessionCount(parseInt(this.value))"><span class="si-info">Adjust if count is wrong</span></div></div>';
-  h+='<div class="data-section"><h3>📤 Export</h3><p>Download all data as JSON.</p><div class="data-btns"><button class="data-btn" onclick="exportJSON()">⬇ Export JSON</button></div></div>';
+  
+  h+='<div class="data-section"><h3>📊 Program Progress</h3><p><strong>'+st.completedSessions+'</strong> of 48 sessions completed · Week <strong>'+pw+'</strong> of 8<br>Next suggested session: <strong>'+nn+'</strong></p>';
+  h+='<div class="session-index-control"><label>COMPLETED</label><input type="number" value="'+st.completedSessions+'" min="0" max="48" onchange="setSessionCount(parseInt(this.value))"><span class="si-info">Adjust if count is wrong</span></div>';
+  h+='<div class="session-index-control"><label>NEXT SESSION</label><select style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-xs);padding:6px 10px;font-size:13px;outline:none" onchange="setNextSessionType(parseInt(this.value))">';
+  for(let i=0;i<6;i++){
+    h+='<option value="'+i+'" '+(i===st.nextSessionType?'selected':'')+'>'+SESSION_NAMES[i]+'</option>';
+  }
+  h+='</select></div></div>';
+  
+  h+='<div class="data-section"><h3>📤 Export</h3><p>Download all data as JSON. <strong>Do this regularly!</strong></p><div class="data-btns"><button class="data-btn" onclick="exportJSON()">⬇ Export JSON</button></div></div>';
+  
   h+='<div class="data-section"><h3>📥 Import</h3><p>Import from a previous export. Merges with existing data.</p><div class="data-btns"><button class="data-btn" onclick="document.getElementById(\'importJSON\').click()">⬆ Import JSON</button><input type="file" id="importJSON" accept=".json" onchange="importJSON(this)"></div></div>';
+  
   h+='<div class="data-section"><h3>⚙ Settings</h3><div class="data-btns"><button class="data-btn danger" onclick="confirmReset()">🗑 Reset All Data</button></div></div>';
+  
   const lc=Object.keys(st.logs).filter(d=>isWorkoutLogged(d)).length;
-  h+='<div style="text-align:center;padding:20px;font-size:11px;color:var(--text3)">'+lc+' workout'+(lc!==1?'s':'')+' logged · v5 · localStorage</div>';app.innerHTML=h;
+  h+='<div style="text-align:center;padding:20px;font-size:11px;color:var(--text3)">'+lc+' workout'+(lc!==1?'s':'')+' logged · v6 · localStorage</div>';
+  app.innerHTML=h;
 }
 
 // ACTIONS
-function logSet(dateStr,id,s,v,chain,numSets){const log=getLog(dateStr);if(log._sessionIndex===undefined&&dateStr>=todayStr())log._sessionIndex=getNextSessionIndex();log[id+'_s'+s]=v===''?'':(parseInt(v)||0);saveLog(dateStr);if(chain&&chain!=='null'&&chain!==''&&numSets)checkProgression(dateStr,id,chain,numSets);const sy=window.scrollY;render();window.scrollTo(0,sy);}
-function toggleCheck(dateStr,key){const log=getLog(dateStr);if(log._sessionIndex===undefined&&dateStr>=todayStr())log._sessionIndex=getNextSessionIndex();log[key]=!log[key];saveLog(dateStr);const sy=window.scrollY;render();window.scrollTo(0,sy);}
-function setSkillPick(dateStr,skillKey,value){const log=getLog(dateStr);log['_skill_'+skillKey]=value;saveLog(dateStr);const sy=window.scrollY;render();window.scrollTo(0,sy);}
-function switchTab(t){st.currentTab=t;saveState();render();window.scrollTo(0,0);}
-function goToDate(dateStr){st.viewDate=(dateStr===todayStr())?null:dateStr;st.currentTab='today';saveState();render();}
-function navigateWeek(offset){const d=parseDate(getActiveDate());d.setDate(d.getDate()+offset*7);goToDate(dk(d));}
-function setLevelManual(chain,lvl){st.levels[chain]=lvl;saveState();const sy=window.scrollY;render();window.scrollTo(0,sy);showToast(PROGS[chain].label+' → Level '+(lvl+1)+': '+PROGS[chain].levels[lvl].name);}
-function setSessionCount(n){if(isNaN(n)||n<0)n=0;if(n>48)n=48;st.completedSessions=n;saveState();render();showToast('Session count set to '+n);}
-
-function finishWorkout(){
-  const dateStr=getActiveDate(),info=getSessionForDate(dateStr),{session,dayName,sessionIndex}=info,log=getLog(dateStr);
-  if(session&&sessionIndex!==null){if(log._sessionIndex===undefined)log._sessionIndex=sessionIndex;log._sessionName=session.name;log._dayName=dayName;log._type=session.type;session.pairs.forEach(p=>p.exercises.forEach(ex=>{if(ex.isFinisher&&log[ex.id+'_s0'])log._finisher=log[ex.id+'_s0'];}));
-    if(!log._completed){log._completed=true;st.completedSessions=Math.max(st.completedSessions,log._sessionIndex+1);saveState();}}
-  else{log._sessionName='Rest Day';log._dayName=dayName;log._type='rest';}
-  saveLog(dateStr);const btn=document.querySelector('.btn-primary');if(btn){btn.textContent='✓ Saved!';btn.style.background='var(--accent2)';btn.style.color='#111';setTimeout(render,800);}
+function logSet(dateStr,id,s,v,chain,numSets){
+  const log=getLog(dateStr);
+  
+  // Ensure session is started
+  if(!log._started){
+    const info=getSessionForDate(dateStr);
+    log._started=true;
+    log._sessionTypeIndex=info.sessionIndex;
+    log._sessionNumber=st.completedSessions;
+    log._dayName=DN[parseDate(dateStr).getDay()];
+    if(info.session){
+      log._sessionName=info.session.name;
+      log._type=info.session.type;
+    }
+  }
+  
+  // Validate and clamp input
+  let val='';
+  if(v!==''&&v!==null&&v!==undefined){
+    let num=parseInt(v);
+    if(!isNaN(num)){
+      num=Math.max(0,Math.min(999,num)); // Clamp 0-999
+      val=num;
+    }
+  }
+  log[id+'_s'+s]=val;
+  
+  saveLog(dateStr);
+  if(chain&&chain!=='null'&&chain!==''&&numSets)checkProgression(dateStr,id,chain,numSets);
+  const sy=window.scrollY;
+  render();
+  window.scrollTo(0,sy);
 }
 
-function deleteLog(dateStr){if(confirm('Delete workout log for '+dateStr+'?')){const log=st.logs[dateStr];if(log&&log._completed){delete st.logs[dateStr];deleteLogStorage(dateStr);const wd=Object.keys(st.logs).filter(d=>st.logs[d]._completed).sort();st.completedSessions=wd.length;wd.forEach((d,i)=>{st.logs[d]._sessionIndex=i;saveLog(d);});saveState();}else{delete st.logs[dateStr];deleteLogStorage(dateStr);}render();showToast('Deleted '+dateStr);}}
+function toggleCheck(dateStr,key){
+  const log=getLog(dateStr);
+  
+  // Ensure session is started
+  if(!log._started){
+    const info=getSessionForDate(dateStr);
+    log._started=true;
+    log._sessionTypeIndex=info.sessionIndex;
+    log._sessionNumber=st.completedSessions;
+    log._dayName=DN[parseDate(dateStr).getDay()];
+    if(info.session){
+      log._sessionName=info.session.name;
+      log._type=info.session.type;
+    }
+  }
+  
+  log[key]=!log[key];
+  saveLog(dateStr);
+  const sy=window.scrollY;
+  render();
+  window.scrollTo(0,sy);
+}
 
-function confirmReset(){if(confirm('Delete ALL workout data?')){if(confirm('Really? Cannot be undone.')){const tr=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&(k.startsWith(LS_LOG_PREFIX)||k===LS_STATE||k.startsWith('pp_v4')))tr.push(k);}tr.forEach(k=>localStorage.removeItem(k));try{localStorage.removeItem('pp_v3');localStorage.removeItem('pp_v2');localStorage.removeItem('hv_v4');}catch(e){}st={currentTab:'today',logs:{},completedSessions:0,levels:{ring_pushup:1,pullup:2,ring_dip:3,ring_row:1},viewDate:null,collapsed:{}};saveState();render();showToast('All data cleared');}}}
+function setSkillPick(dateStr,skillKey,value){
+  const log=getLog(dateStr);
+  log['_skill_'+skillKey]=value;
+  saveLog(dateStr);
+  const sy=window.scrollY;
+  render();
+  window.scrollTo(0,sy);
+}
 
-function exportJSON(){const data={version:'pp_v5',exportDate:todayStr(),completedSessions:st.completedSessions,levels:st.levels,logs:st.logs};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pushpull_tracker_'+todayStr()+'.json';a.click();showToast('JSON exported');}
-function importJSON(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(data.logs){let count=0;for(const k of Object.keys(data.logs)){if(!st.logs[k])st.logs[k]={};Object.assign(st.logs[k],data.logs[k]);saveLog(k);count++;}if(data.levels)st.levels={...st.levels,...data.levels};if(data.completedSessions!==undefined)st.completedSessions=Math.max(st.completedSessions,data.completedSessions);saveState();render();showToast(count+' workouts imported');}else{showToast('Invalid JSON format');}}catch(err){showToast('Import error: '+err.message);}input.value='';};reader.readAsText(file);}
+function switchTab(t){st.currentTab=t;saveState();render();window.scrollTo(0,0);}
+function goToDate(dateStr){st.viewDate=(dateStr===todayStr())?null:dateStr;st.currentTab='today';showingSessionPicker=false;saveState();render();}
+function navigateWeek(offset){const d=parseDate(getActiveDate());d.setDate(d.getDate()+offset*7);goToDate(dk(d));}
 
-function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}t.textContent='✓ '+msg;t.className='toast show';setTimeout(()=>{t.className='toast';},2400);}
+function setLevelManual(chain,lvl){
+  st.levels[chain]=lvl;
+  saveState();
+  const sy=window.scrollY;
+  render();
+  window.scrollTo(0,sy);
+  showToast(PROGS[chain].label+' → Level '+(lvl+1)+': '+PROGS[chain].levels[lvl].name);
+}
+
+function setSessionCount(n){
+  if(isNaN(n)||n<0)n=0;
+  if(n>48)n=48;
+  st.completedSessions=n;
+  saveState();
+  render();
+  showToast('Session count set to '+n);
+}
+
+function setNextSessionType(idx){
+  if(idx<0||idx>5)idx=0;
+  st.nextSessionType=idx;
+  saveState();
+  render();
+  showToast('Next session set to '+SESSION_NAMES[idx]);
+}
+
+function finishWorkout(){
+  const dateStr=getActiveDate();
+  const log=getLog(dateStr);
+  const info=getSessionForDate(dateStr);
+  const{session,sessionIndex}=info;
+  
+  // Mark as completed if not already
+  if(!log._completed&&session){
+    log._completed=true;
+    log._completedAt=new Date().toISOString();
+    
+    // Record finisher
+    if(session){
+      session.pairs.forEach(p=>p.exercises.forEach(ex=>{
+        if(ex.isFinisher&&log[ex.id+'_s0'])log._finisher=log[ex.id+'_s0'];
+      }));
+    }
+    
+    // Increment completed sessions and advance rotation
+    st.completedSessions++;
+    st.nextSessionType=(sessionIndex+1)%6;
+    saveState();
+  }
+  
+  saveLog(dateStr);
+  
+  const btn=document.querySelector('.btn-primary');
+  if(btn){
+    btn.textContent='✓ Saved!';
+    btn.style.background='var(--accent2)';
+    btn.style.color='#111';
+    setTimeout(render,800);
+  }
+}
+
+function deleteLog(dateStr){
+  if(confirm('Delete workout log for '+dateStr+'?')){
+    const log=st.logs[dateStr];
+    const wasCompleted=log&&log._completed;
+    
+    delete st.logs[dateStr];
+    deleteLogStorage(dateStr);
+    
+    // Recalculate if it was a completed workout
+    if(wasCompleted){
+      st.completedSessions=Math.max(0,st.completedSessions-1);
+      saveState();
+    }
+    
+    render();
+    showToast('Deleted '+dateStr);
+  }
+}
+
+function confirmReset(){
+  if(confirm('Delete ALL workout data?')){
+    if(confirm('Really? This cannot be undone.')){
+      // Clear all storage
+      const toRemove=[];
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k&&(k.startsWith(LS_LOG_PREFIX)||k===LS_STATE||k.startsWith('pp_v')||k===LS_BACKUP_DISMISSED)){
+          toRemove.push(k);
+        }
+      }
+      toRemove.forEach(k=>localStorage.removeItem(k));
+      
+      // Reset state
+      st={
+        currentTab:'today',
+        logs:{},
+        completedSessions:0,
+        nextSessionType:0,
+        levels:{ring_pushup:1,pullup:2,ring_dip:3,ring_row:1},
+        viewDate:null,
+        collapsed:{}
+      };
+      saveState();
+      render();
+      showToast('All data cleared');
+    }
+  }
+}
+
+function exportJSON(){
+  const data={
+    version:'pp_v6',
+    exportDate:todayStr(),
+    exportTime:new Date().toISOString(),
+    completedSessions:st.completedSessions,
+    nextSessionType:st.nextSessionType,
+    levels:st.levels,
+    logs:st.logs
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='pushpull_tracker_'+todayStr()+'.json';
+  a.click();
+  
+  // Mark backup as done
+  localStorage.setItem(LS_BACKUP_DISMISSED,new Date().toISOString());
+  showToast('JSON exported');
+  render();
+}
+
+function importJSON(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.logs){
+        let count=0;
+        for(const k of Object.keys(data.logs)){
+          if(!st.logs[k])st.logs[k]={};
+          Object.assign(st.logs[k],data.logs[k]);
+          
+          // Ensure v6 format
+          if(!st.logs[k]._started&&isWorkoutLogged(k)){
+            st.logs[k]._started=true;
+          }
+          
+          saveLog(k);
+          count++;
+        }
+        if(data.levels)st.levels={...st.levels,...data.levels};
+        if(data.completedSessions!==undefined)st.completedSessions=Math.max(st.completedSessions,data.completedSessions);
+        if(data.nextSessionType!==undefined)st.nextSessionType=data.nextSessionType;
+        saveState();
+        render();
+        showToast(count+' workouts imported');
+      }else{
+        showToast('Invalid JSON format','error');
+      }
+    }catch(err){
+      showToast('Import error: '+err.message,'error');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
+
+function showToast(msg,type){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toast';
+    document.body.appendChild(t);
+  }
+  t.textContent=(type==='error'?'✗ ':'✓ ')+msg;
+  t.className='toast'+(type==='error'?' error':'')+' show';
+  setTimeout(()=>{t.className='toast';},2400);
+}
 
 // INIT
-loadAll();render();
+loadAll();
+render();
 </script>
 </body>
 </html>
